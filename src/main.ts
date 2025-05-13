@@ -4,8 +4,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
   template: `
-    @for(value of arrayvalue(); track value.name) {
-      <input type="checkbox"  [checked]="value.isSelected" (change)="toggleSelect(value)" /> {{ value.name }}
+    @for(item of itemList(); track item.name) {
+      <input type="checkbox"  [checked]="item.isSelected" (change)="toggleSelect(item)" /> {{ item.name }}
       <br />
     }
     {{ anySelected() }}
@@ -13,7 +13,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 })
 export class App {
   name = 'Angular';
-  arrayvalue = signal([
+  itemList = signal([
     {
       name: 'test1',
       isSelected: false,
@@ -28,17 +28,17 @@ export class App {
     },
   ]);
   anySelected = computed(() =>
-    this.arrayvalue().some((value) => value.isSelected)
+    this.itemList().some((value) => value.isSelected)
   );
 
-  public toggleSelect(item: any) {
-    console.log(JSON.parse(JSON.stringify(this.arrayvalue())));
-    this.arrayvalue.update((arrayvalue) => {
-      let index = arrayvalue.findIndex((value) => value.name == item.name);
-      arrayvalue[index].isSelected = !arrayvalue[index].isSelected;
-      return arrayvalue;
+  public toggleSelect(value: any) {
+    console.log(JSON.parse(JSON.stringify(this.itemList())));
+    this.itemList.update((itemList) => {
+      let index = itemList.findIndex(item => value.name == item.name);
+      itemList[index].isSelected = !itemList[index].isSelected;
+      return itemList;
     });
-    console.log(JSON.parse(JSON.stringify(this.arrayvalue())));
+    console.log(JSON.parse(JSON.stringify(this.itemList())));
   }
 }
 
