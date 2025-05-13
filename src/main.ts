@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 
 @Component({
@@ -31,13 +31,23 @@ export class App {
     this.itemList().some((value) => value.isSelected)
   );
 
+  constructor() {
+    effect(() => {
+      console.log(this.itemList());
+    })
+  }
+
   public toggleSelect(value: any) {
     console.log(JSON.parse(JSON.stringify(this.itemList())));
-    this.itemList.update((itemList) => {
-      let index = itemList.findIndex(item => value.name == item.name);
-      itemList[index].isSelected = !itemList[index].isSelected;
-      return itemList;
-    });
+    // this.itemList.update((itemList) => {
+    //   let index = itemList.findIndex(item => value.name == item.name);
+    //   itemList[index].isSelected = !itemList[index].isSelected;
+    //   return itemList;
+    // });
+    let itemList = this.itemList();
+    let index = itemList.findIndex(item => value.name == item.name);
+    itemList[index].isSelected = !itemList[index].isSelected;
+    this.itemList.set(itemList);
     console.log(JSON.parse(JSON.stringify(this.itemList())));
   }
 }
